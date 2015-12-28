@@ -1,0 +1,5 @@
+<%= render EdgeBuilder.SharedView, "_errors.html", errors: assigns[:errors] %>
+
+<%= form_tag(game_path(@conn, :update, @game.model), role: "form", method: "PUT") %>
+  <%= render "_form.html", assigns %>
+</form>

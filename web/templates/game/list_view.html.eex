@@ -1,0 +1,12 @@
+<div class='list-group'>
+  <%= for game <- @games do %>
+    <a href="<%= game_path(@conn, :show, game) %>" class='list-group-item creation-list-group-item'>
+      <div class='row'>
+        <div class='col-xs-12'>
+          <h3 class="list-group-item-heading"><%= game.name %></h3>
+          <p><%= game.description %></p>
+        </div>
+      </div>
+    </a>
+  <% end %>
+</div>

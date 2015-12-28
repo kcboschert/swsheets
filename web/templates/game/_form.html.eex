@@ -1,0 +1,25 @@
+<div class="row well save-panel">
+  <button type="submit" class="btn btn-success">Save</button>
+  <a class="btn btn-default pull-right" href="<%= game_path(@conn, :index) %>">Cancel</a>
+</div>
+
+<div class="row main-form">
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="game[name]">Game Name</label>
+          <input type="text" class="form-control" name="game[name]" value="<%= get_field(@game, :name) %>" />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label for="game[description]">Description</label>
+          <textarea class="form-control" name="game[description]" /><%= get_field(@game, :description) %></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

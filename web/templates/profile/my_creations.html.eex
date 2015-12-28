@@ -1,4 +1,4 @@
-<div class="col-md-5 col-md-offset-1">
+<div class="col-md-4">
   <h2>My Characters</h2>
   <h2><small><a href="<%= character_path(@conn, :new) %>">New Character</a></small></h2>
   <%= for character <- @characters do %>
@@ -31,7 +31,7 @@
   <% end %>
 </div>
 
-<div class="col-md-5">
+<div class="col-md-4">
   <h2>My Vehicles</h2>
   <h2><small><a href="<%= vehicle_path(@conn, :new) %>">New Vehicle</a></small></h2>
   <%= for vehicle <- @vehicles do %>
@@ -48,6 +48,29 @@
           <a class="btn btn-primary" href="<%= vehicle_path(@conn, :edit, vehicle) %>">Edit</a>
           <%= render EdgeBuilder.SharedView, "_delete_button.html", conn: @conn, model: vehicle %>
           <%= render EdgeBuilder.SharedView, "_delete_modal.html", conn: @conn, model: vehicle, helper: :vehicle_path %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="col-md-4">
+  <h2>My Games</h2>
+  <h2><small><a href="<%= game_path(@conn, :new) %>">New Game</a></small></h2>
+  <%= for game <- @games do %>
+    <div class="creation-owner-container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h2><a href="<%= game_path(@conn, :show, game) %>"><%= game.name %></a></h2>
+          <p><%= game.description %></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 pull-right">
+          <a class="btn btn-success" href="<%= game_path(@conn, :show, game) %>">View</a>
+          <a class="btn btn-primary" href="<%= game_path(@conn, :edit, game) %>">Edit</a>
+          <%= render EdgeBuilder.SharedView, "_delete_button.html", conn: @conn, model: game %>
+          <%= render EdgeBuilder.SharedView, "_delete_modal.html", conn: @conn, model: game, helper: :game_path %>
         </div>
       </div>
     </div>

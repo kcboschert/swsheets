@@ -1,0 +1,26 @@
+<h1>Newest Games</h1>
+
+<h2><small><a href="<%= game_path(@conn, :new) %>">Create a New Game</a></small></h2>
+
+<hr>
+
+<div class='row'>
+  <div class='col-md-10 col-md-offset-1'>
+    <%= render EdgeBuilder.SharedView, "_pagination.html", page_number: @page_number, total_pages: @total_pages %>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-md-1'></div>
+  <%= for game_group <- Enum.chunk(@games, 5, 5, [nil]) do %>
+    <div class="col-md-5">
+      <%= render EdgeBuilder.GameView, "list_view.html", conn: @conn, games: Enum.reject(game_group, &is_nil/1) %>
+    </div>
+  <% end %>
+</div>
+
+<div class='row bottom-pagination'>
+  <div class='col-md-10 col-md-offset-1'>
+    <%= render EdgeBuilder.SharedView, "_pagination.html", page_number: @page_number, total_pages: @total_pages %>
+  </div>
+</div>

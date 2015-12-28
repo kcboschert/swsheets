@@ -1,0 +1,14 @@
+<%= if @viewed_by_owner do %>
+  <%= render EdgeBuilder.SharedView, "_save_panel.html", conn: @conn, model: @game, helper: :game_path %>
+<% end %>
+
+<div class="row main-area">
+  <div class="col-md-12">
+    <div class="row">
+      <h2><%= get_field(@game, :name) %> <small>by <%= profile_link(@conn, @user, 15) %></small></h2>
+    </div>
+    <div class="row">
+      <%= get_field(@game, :description) %>
+    </div>
+  </div>
+</div>
