@@ -12,7 +12,7 @@ defmodule EdgeBuilder.GameController do
     render_new conn
   end
 
-  def create(conn, params = %{"game" => game_params}) do
+  def create(conn, %{"game" => game_params}) do
     game = Game.changeset(%Game{}, current_user_id(conn), game_params)
 
     if game.valid? do
@@ -57,7 +57,7 @@ defmodule EdgeBuilder.GameController do
     end
   end
 
-  def update(conn, params = %{"id" => id, "game" => game_params}) do
+  def update(conn, %{"id" => id, "game" => game_params}) do
     game = Game.full_game(id)
 
     if !is_owner?(conn, game) do
