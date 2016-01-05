@@ -6,6 +6,7 @@ defmodule EdgeBuilder.Models.Character do
   alias EdgeBuilder.Models.Attack
   alias EdgeBuilder.Models.CharacterSkill
   alias EdgeBuilder.Models.ForcePower
+  alias EdgeBuilder.Models.GameCharacter
 
   @derive {Phoenix.Param, key: :permalink}
   schema "characters" do
@@ -55,6 +56,9 @@ defmodule EdgeBuilder.Models.Character do
     has_many :attacks, Attack
     has_many :character_skills, CharacterSkill
     has_many :force_powers, ForcePower
+
+    has_many :game_characters, GameCharacter
+    has_many :games, through: [:game_characters, :game]
   end
 
   before_insert Ecto.Changeset, :delete_change, [:url_slug]
@@ -81,8 +85,18 @@ defmodule EdgeBuilder.Models.Character do
     )
   end
 
+  def for_game(game_id) do
+    Repo.all(
+      from c in __MODULE__,
+      join: gc in assoc(c, :game_characters),
+      where: gc.game_id == ^game_id,
+      select: c,
+      order_by: [asc: c.name]
+    )
+  end
+
   def delete(character) do
-    Enum.each [Talent, Attack, CharacterSkill], fn(child_module) ->
+    Enum.each [Talent, Attack, CharacterSkill, GameCharacter], fn(child_module) ->
       Repo.delete_all(from c in child_module, where: c.character_id == ^character.id)
     end
 

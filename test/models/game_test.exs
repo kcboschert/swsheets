@@ -1,8 +1,11 @@
 defmodule EdgeBuilder.GameTest do
   use EdgeBuilder.TestCase
 
+  alias Factories.CharacterFactory
   alias Factories.GameFactory
+  alias EdgeBuilder.Models.Character
   alias EdgeBuilder.Models.Game
+  alias EdgeBuilder.Models.GameCharacter
   alias EdgeBuilder.Repo
 
   describe "url_slug" do
@@ -47,6 +50,21 @@ defmodule EdgeBuilder.GameTest do
       found_game = Game.full_game("#{game.url_slug}-does-not-matter")
 
       assert game.id == found_game.id
+    end
+  end
+
+  describe "remove_character" do
+    it "removes the character sheet from the game" do
+      game = GameFactory.create_game
+      boba = CharacterFactory.create_character(name: "Boba Fett")
+      %GameCharacter{
+        game_id: game.id,
+        character_id: boba.id,
+      } |> Repo.insert!
+
+      Game.remove_character(game, boba.permalink)
+
+      assert Character.for_game(game.id) == []
     end
   end
 end

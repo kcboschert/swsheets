@@ -1,6 +1,8 @@
 defmodule EdgeBuilder.Models.Game do
   use EdgeBuilder.Web, :model
 
+  alias EdgeBuilder.Models.GameCharacter
+
   @derive {Phoenix.Param, key: :permalink}
   schema "games" do
     field :url_slug, :string, read_after_writes: true
@@ -10,6 +12,9 @@ defmodule EdgeBuilder.Models.Game do
 
     timestamps
     belongs_to :user, User
+
+    has_many :game_characters, GameCharacter, on_delete: :delete_all
+    has_many :characters, through: [:game_characters, :character]
   end
 
   before_insert Ecto.Changeset, :delete_change, [:url_slug]
@@ -30,8 +35,22 @@ defmodule EdgeBuilder.Models.Game do
 
     Repo.one!(
       from g in __MODULE__,
+        preload: [:characters],
         where: g.url_slug == ^url_slug
     )
+  end
+
+  def remove_character(game, character_permalink) do
+    character_url_slug = String.replace(character_permalink, ~r/-.*/, "")
+
+    game_character = Repo.one!(
+      from gc in GameCharacter,
+      join: c in assoc(gc, :character),
+      where: gc.game_id == ^game.id and c.url_slug == ^character_url_slug,
+      select: gc
+    )
+
+    Repo.delete!(game_character)
   end
 
   def _set_permalink_for_changeset(changeset) do

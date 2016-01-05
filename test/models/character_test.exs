@@ -2,7 +2,9 @@ defmodule EdgeBuilder.Models.CharacterTest do
   use EdgeBuilder.TestCase
 
   alias Factories.CharacterFactory
+  alias Factories.GameFactory
   alias EdgeBuilder.Models.Character
+  alias EdgeBuilder.Models.GameCharacter
   alias EdgeBuilder.Repo
 
   describe "url_slug" do
@@ -54,6 +56,26 @@ defmodule EdgeBuilder.Models.CharacterTest do
     it "changes imgur page url to image url" do
       character = CharacterFactory.create_character(portrait_url: "http://imgur.com/gallery/OjCH1Th")
       assert character.portrait_url == "http://i.imgur.com/OjCH1Th.jpg"
+    end
+  end
+
+  describe "for_game" do
+    it "retrieves all characters for a game" do
+      game = GameFactory.create_game
+      boba = CharacterFactory.create_character(name: "Boba Fett")
+      han = CharacterFactory.create_character(name: "Han Solo")
+
+      %GameCharacter{
+        game_id: game.id,
+        character_id: boba.id,
+      } |> Repo.insert!
+
+      %GameCharacter{
+        game_id: game.id,
+        character_id: han.id,
+      } |> Repo.insert!
+
+      assert Character.for_game(game.id) == [boba, han]
     end
   end
 end
