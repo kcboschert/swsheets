@@ -1,0 +1,8 @@
+<%= form_tag(game_character_path(@conn, :search, @game), role: "form", method: :get) %>
+  <div class="input-group">
+    <input type="text" class="form-control" name="search" placeholder="Search Characters to add...">
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="submit">Search</button>
+    </span>
+  </div>
+</form>

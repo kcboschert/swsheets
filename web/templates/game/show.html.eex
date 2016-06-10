@@ -2,13 +2,50 @@
   <%= render EdgeBuilder.SharedView, "_save_panel.html", conn: @conn, model: @game, helper: :game_path %>
 <% end %>
 
-<div class="row main-area">
+<div class="row">
   <div class="col-md-12">
     <div class="row">
-      <h2><%= get_field(@game, :name) %> <small>by <%= profile_link(@conn, @user, 15) %></small></h2>
+      <h1><%= get_field(@game, :name) %> <small>by <%= profile_link(@conn, @user, 15) %></small></h1>
     </div>
     <div class="row">
       <%= get_field(@game, :description) %>
     </div>
   </div>
+</div>
+
+<div class="row">
+  <h2>Characters</h2>
+  <%= render EdgeBuilder.GameCharacterView, "_search_form.html", conn: @conn, game: @game %>
+  <p>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <th>Name</th>
+        <%= for character <- @game.characters do %>
+          <th>
+            <a href="<%= character_path(@conn, :show, character) %>">
+              <%= character.name %>
+            </a>
+          </th>
+        <% end %>
+      </thead>
+      <%= for [display, attribute] <- display_attributes do %>
+        <tr>
+          <td><%= display %></td>
+          <%= for character <- @game.characters do %>
+            <td><%= Map.get(character, String.to_atom(attribute)) %></td>
+          <% end %>
+        </tr>
+      <% end %>
+        <tr>
+          <td>Skills</td>
+          <%= for character <- @game.characters do %>
+            <td>
+              <%= for skill <- character.character_skills do %>
+                <%= skill.base_skill.name %>: <%= skill.rank %><br/>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+    </table>
+  </p>
 </div>

@@ -41,6 +41,7 @@ defmodule EdgeBuilder.GameController do
     user = Repo.get!(User, game.user_id)
 
     render conn, :show,
+      title: game.name,
       game: game,
       user: user,
       viewed_by_owner: is_owner?(conn, game)

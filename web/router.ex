@@ -26,7 +26,10 @@ defmodule EdgeBuilder.Router do
     resources "/c", CharacterController
     resources "/u", ProfileController, only: [:show]
     resources "/v", VehicleController
-    resources "/g", GameController
+    resources "/g", GameController do
+      resources "/c", GameCharacterController, only: [:create, :delete], as: :character
+      get "/c/search", GameCharacterController, :search, as: :character
+    end
     get "/my-creations", ProfileController, :my_creations
     get  "/welcome", SignupController, :welcome
     get  "/forgot-password", PasswordResetController, :request

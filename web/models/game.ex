@@ -35,7 +35,7 @@ defmodule EdgeBuilder.Models.Game do
 
     Repo.one!(
       from g in __MODULE__,
-        preload: [:characters],
+        preload: [{:characters, [{:character_skills, :base_skill}]}],
         where: g.url_slug == ^url_slug
     )
   end
